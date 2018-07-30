@@ -178,20 +178,12 @@ class Entry(Resource):
 class SingleEntry(Resource):
     
     def get(self,entryId):
-        
-        #if int(entryId) == int (entry['id']):
-           # final_data = {
-           # 'id' : entry['id'],
-            #'title':entry['title'],
-           # 'content':entry['content'],
-            #'date':entry['date']
-            #}
 
         cur = conn.cursor()
-        cur.execute("SELECT * from entries where entryid={}".format(entryId))
+        cur.execute("SELECT * from entries where entryid=%s,entryId")
         result=cur.fetchone()
         print(result)
-       # return {'entry': final_data}, 200
+        return {'entry': result}, 200
 
         return make_response(jsonify({
             'message':'Sorry the entry does not exist'
