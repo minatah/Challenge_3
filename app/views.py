@@ -179,7 +179,7 @@ class SingleEntry(Resource):
     
     def get(self,entryId):
         cur = conn.cursor()
-        cur.execute("SELECT * from entries where entryid=%s,entryId")
+        cur.execute("SELECT * from entries where entryid=%s",(entryId,))
         result=cur.fetchone()
         print(result)
         return {'entry': result}, 200
@@ -187,6 +187,15 @@ class SingleEntry(Resource):
        # return make_response(jsonify({
           #  'message':'Sorry the entry does not exist'
         #}),404)
+
+class viewEntries(Resource):
+    def get(self):
+        cur = conn.cursor()
+        cur.execute("SELECT * from entries")
+        result=cur.fetchall()
+        print(result)
+        return {'entry': result}, 200
+
 
     def put(self, entryId):
 
