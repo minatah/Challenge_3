@@ -178,7 +178,6 @@ class Entry(Resource):
 class SingleEntry(Resource):
     
     def get(self,entryId):
-
         cur = conn.cursor()
         cur.execute("SELECT * from entries where entryid=%s,entryId")
         result=cur.fetchone()
