@@ -178,16 +178,16 @@ class Entry(Resource):
 class SingleEntry(Resource):
     
     def get(self,entryId):
-        
+
         cur = conn.cursor()
-        cur.execute("SELECT * from entries where entryid={}".format(entryId))
+        cur.execute("SELECT * from entries where entryid=%s,entryId")
         result=cur.fetchone()
         print(result)
-       # return {'entry': final_data}, 200
+        return {'entry': result}, 200
 
-        return make_response(jsonify({
-            'message':'Sorry the entry does not exist'
-        }),404)
+       # return make_response(jsonify({
+          #  'message':'Sorry the entry does not exist'
+        #}),404)
 
     def put(self, entryId):
 
@@ -198,12 +198,10 @@ class SingleEntry(Resource):
         parser.add_argument('date', type=str, required=True)
 
         """getting specific args"""
-        args = parser.parse_args()
+        #args = parser.parse_args()
 
-        title = args['title']
-        content = args['content']
-        date = args['date']
-
+      
+    
  
        
 
