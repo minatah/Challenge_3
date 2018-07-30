@@ -179,14 +179,6 @@ class SingleEntry(Resource):
     
     def get(self,entryId):
         
-        #if int(entryId) == int (entry['id']):
-           # final_data = {
-           # 'id' : entry['id'],
-            #'title':entry['title'],
-           # 'content':entry['content'],
-            #'date':entry['date']
-            #}
-
         cur = conn.cursor()
         cur.execute("SELECT * from entries where entryid={}".format(entryId))
         result=cur.fetchone()
