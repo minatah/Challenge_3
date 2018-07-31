@@ -163,16 +163,6 @@ class Entry(Resource):
         except psycopg2.InterfaceError as Ie:
              print(Ie)
              return self.insert_entries()
-    def get (self):
-        cur = conn.cursor()
-        cur.execute("SELECT * from entries")
-        conn.commit()
-
-        return make_response(jsonify({
-            'message':'entries retrived successfully.'
-        }),201) 
-        
-        #return {'entries': entries_list} ,200
 
 
 class SingleEntry(Resource):
@@ -196,18 +186,36 @@ class viewEntries(Resource):
         print(result)
         return {'entry': result}, 200
 
-
+class UpdateEntries(Resource):
     def put(self, entryId):
-
+        
         parser = reqparse.RequestParser()
         """collecting args"""
-        parser.add_argument('title', type=str, required=True)
-        parser.add_argument('content', type=str, required=True)
+
+        parser.add_argument('title', type=str,required=True)
+        parser.add_argument('content', type=str,required=True)
         parser.add_argument('date', type=str, required=True)
 
         """getting specific args"""
-        #args = parser.parse_args()
+        args = parser.parse_args()
+        title = args['title']
+        content =args['content']
+        date = args['date']
+        try:
+            cur = conn.cursor()
+            cur.execute("UPDATE entries SET title=%s,contents=%s,date_=%s where entryid=%s",(title,content,date,entryId))
+            conn.commit()
+            return make_response(jsonify({
+        'message': 'entry updated successfully'
+        }), 200)
+        except:
+            return make_response(jsonify({
+        'message': 'entry not found'
+        }), 404)
 
+        
+            
+        
       
     
  
