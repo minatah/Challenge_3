@@ -35,19 +35,29 @@ python run.py
 Testing and knowing coverage run
 
 nosetests or python manage.py test
+
 Endpoints to create a user account and login into the application
+
 HTTP Method	End Point	Action
-| POST	api/v1/user/register	Create an account
-| POST	/api/v1/login	Login user
+
+ POST	api/v1/user/register	Create an account
+
+ POST	/api/v1/login	Login user
 
 ## Other Endpoints.
-| HTTP Method	End Point	Action
-| POST	/api/v1/users/rides	Creates ride offers.
-| GET	/api/v1/users/rides	Login user.
-| GET	/api/v1/rides/	Get specific ride offer by ID.
-| POST	/rides//requests	Makes a ride request.
-| GET	/users/rides//requests	Fetch all ride requests.
-| PUT	/users/rides//requests/	Accept or reject a ride request.
+ HTTP Method	End Point	Action
+
+ POST	/api/v1/users/rides	Creates ride offers.
+
+ GET	/api/v1/users/rides	Login user.
+
+ GET	/api/v1/rides/	Get specific ride offer by ID.
+
+ POST	/rides//requests	Makes a ride request.
+
+ GET	/users/rides//requests	Fetch all ride requests.
+ 
+ PUT	/users/rides//requests/	Accept or reject a ride request.
 
 
 ## Author: 
