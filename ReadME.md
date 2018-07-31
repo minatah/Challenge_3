@@ -31,6 +31,29 @@ Then install all the necessary dependencies by
 pip install -r requirements.txt
 Then run the application
 
+python run.py
+Testing and knowing coverage run
+
+nosetests or python manage.py test
+
+Endpoints to create a user account and login into the application
+
+HTTP Method	End Point	Action
+
+ POST   /auth/signup	Create an account
+
+ POST	/auth/login	Login user
+
+## Other Endpoints.
+ HTTP Method	End Point	Action
+
+ POST	/api/v1/entries	 Creates entries in the database.
+
+ GET     /api/v1/entries/<entryId>
+
+ GET	/api/v1/entries 	Fetch all entries requests.
+ 
+ PUT	/api/v1/entries/<entryId>	update the entries request.
 
 
 ## Author: 
