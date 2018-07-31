@@ -178,13 +178,22 @@ class SingleEntry(Resource):
           #  'message':'Sorry the entry does not exist'
         #}),404)
 
+
 class viewEntries(Resource):
     def get(self):
         cur = conn.cursor()
         cur.execute("SELECT * from entries")
         result=cur.fetchall()
-        print(result)
-        return {'entry': result}, 200
+        
+        lst=[]
+        for info in result:
+            dic={}
+            dic["id"]=info[0]
+            dic["title"]=info[1]
+            dic["content"]=info[2]
+            dic["date"]=info[3]
+            lst.append(dic)
+        return lst, 200
 
 class UpdateEntries(Resource):
     def put(self, entryId):
