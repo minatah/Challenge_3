@@ -49,7 +49,7 @@ HTTP Method	End Point	Action
 
  POST	/api/v1/entries	 Creates entries in the database.
 
- GET     /api/v1/entries/<entryId>
+ GET     /api/v1/entries/<entryId>  getting a single entry
 
  GET	/api/v1/entries 	Fetch all entries requests.
  
