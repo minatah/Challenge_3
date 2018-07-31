@@ -163,7 +163,7 @@ class Entry(Resource):
         except psycopg2.InterfaceError as Ie:
              print(Ie)
              return self.insert_entries()
-
+   
 
 class SingleEntry(Resource):
     

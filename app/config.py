@@ -40,7 +40,7 @@ def generate_token(username):
 
 def decode_token(token):
     """Decode the access token to get the payload 
-    and return user_id and isDriver field results"""
+    and return user_id and  field results"""
     try:
         payload = jwt.decode(token, current_app.config.get('SECRET_KEY'))
         return {"username": payload['username'],
