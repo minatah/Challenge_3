@@ -36,7 +36,7 @@ Testing and knowing coverage run
 
 nosetests or python manage.py test
 
-Endpoints to create a user account and login into the application
+## Endpoints to create a user account and login into the application
 
 HTTP Method	End Point	Action
 
