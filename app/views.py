@@ -5,6 +5,7 @@ from app.config import generate_token,decode_token,configconnection
 import re
 import psycopg2
 
+
 class SignUp(Resource):
     
     def post(self):
@@ -48,20 +49,13 @@ class SignUp(Resource):
         """creating a sign up  cursor to check for already existing users."""
         conn=configconnection()
         cur = conn.cursor()
-        cur.callproc('signup', (username,email,password,))
-        """fecthing one value in a row """
-        row = cur.fetchone()
+
+        cur.execute("INSERT INTO users (username,email,password) VALUES ('"+username+"','"+email+"','"+password+"')")
         conn.commit()
-        """formatting the status_value , removong unwanted symbols"""
-        status_value = str(row).strip().replace('(','').replace(')','').replace(',','')
-        
-        if int(status_value)== 0:
-            return make_response(jsonify({
-                "message":'The username is already in use'
-            }), 409)
         return make_response(jsonify({
                 "message":'User created successfully'
             }), 201)
+
 
 class Login(Resource):
     def post(self):
@@ -93,19 +87,13 @@ class Login(Resource):
 
         conn=configconnection()
         cur = conn.cursor()
-        cur.callproc('login', (username,password,))
-        """fecthing one value in a row """
-        row = cur.fetchone()
+
+        cur.execute("INSERT INTO users (username,password) VALUES ('"+username+"','"+password+"')")
         conn.commit()
-        """formatting the status_value , removong unwanted symbols"""
-        status_value = str(row).strip().replace('(','').replace(')','').replace(',','')
         
         token = generate_token(username)
 
-        if int(status_value)== 0:
-            return make_response(jsonify({
-                "message":'invalid username or password'
-            }), 400)
+        
         return make_response(jsonify({
                 "message":'User signed in successfully',
                 'token':token
@@ -185,35 +173,17 @@ class SingleEntry(Resource):
 
 
 class viewEntries(Resource):
-    parser = reqparse.RequestParser()
-    """collecting args""" 
-    parser.add_argument('token', location='headers')
-     
-      """getting token"""
-      token = args['token']
-       if not token:
-            
-    return make_response(jsonify({
-                'message':'token missing'
-            }),400)    
-       """ implementing token decoding"""
-        
-       decoded = decode_token(token)
-        
-        if decoded["status"] == "Failure":
- 
-    return make_response(jsonify({"message": decoded["message"]}),
-                                 401)
+    
 
     def get(self):
-
         conn=configconnection()
         cur=conn.cursor()
         cur.execute("SELECT * from entries")
         result=cur.fetchall()
-        
+            
         lst=[]
         for info in result:
+            
             dic={}
             dic["id"]=info[0]
             dic["title"]=info[1]

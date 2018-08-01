@@ -10,7 +10,7 @@ from app.models import usertable,entrytable
 #conn = psycopg2.connect(
     #"host='localhost' dbname='MyDiary' user='postgres' password='1234'")
 def configconnection():
-    cur=""
+    
     if current_app.config["TESTING"] is not True:
         conn = psycopg2.connect("host='localhost' dbname='MyDiary' user='postgres' password='1234'")
         cur=conn.cursor()
@@ -18,6 +18,7 @@ def configconnection():
         conn.commit()
         cur.execute(entrytable)
         conn.commit()
+        
     else:
         
         conn = psycopg2.connect("host='localhost' dbname='testDB' user='postgres' password='1234'")
@@ -26,6 +27,7 @@ def configconnection():
         conn.commit()
         cur.execute(entrytable)
         conn.commit()
+        
     return conn
 
 def generate_token(username):
