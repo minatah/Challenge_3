@@ -11,22 +11,22 @@ from app.models import usertable,entrytable
     #"host='localhost' dbname='MyDiary' user='postgres' password='1234'")
 def configconnection():
     
-    if current_app.config["TESTING"] is not True:
-        conn = psycopg2.connect("host='localhost' dbname='MyDiary' user='postgres' password='1234'")
-        cur=conn.cursor()
-        cur.execute(usertable)
-        conn.commit()
-        cur.execute(entrytable)
-        conn.commit()
+    # if current_app.config["TESTING"] is not True:
+    conn = psycopg2.connect("host='localhost' dbname='MyDiary' user='postgres' password='1234'")
+    cur=conn.cursor()
+    cur.execute(usertable)
+    conn.commit()
+    cur.execute(entrytable)
+    conn.commit()
         
-    else:
+    # else:
         
-        conn = psycopg2.connect("host='localhost' dbname='testDB' user='postgres' password='1234'")
-        cur =conn.cursor()
-        cur.execute(usertable)
-        conn.commit()
-        cur.execute(entrytable)
-        conn.commit()
+    #     conn = psycopg2.connect("host='localhost' dbname='testDB' user='postgres' password='1234'")
+    #     cur =conn.cursor()
+    #     cur.execute(usertable)
+    #     conn.commit()
+    #     cur.execute(entrytable)
+    #     conn.commit()
         
     return conn
 
@@ -70,3 +70,45 @@ def decode_token(token):
         return {"status": "Failure",
                 "message": "Invalid token. Please register or login"}
 
+
+
+
+
+
+class BaseConfig(object):
+    """
+    Common configurations
+    """
+    TESTING = False
+    DEBUG = False
+    SECRET_KEY = os.urandom(24)
+    # Put any configurations here that are common across all environments
+
+
+class TestingConfig(BaseConfig):
+    """Configurations for Testing, with a separate test database."""
+    TESTING = True
+    DEBUG = True
+
+
+class DevelopmentConfig(BaseConfig):
+    """
+    Development configurations
+    """
+
+    DEBUG = True
+
+
+class ProductionConfig(BaseConfig):
+    """
+    Production configurations
+    """
+
+    DEBUG = False
+
+
+app_config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}

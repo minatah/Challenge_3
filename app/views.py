@@ -58,7 +58,7 @@ class SignUp(Resource):
         
             return make_response(jsonify({
                 "message":'Username is used'
-            }), 201)
+            }), 400)
         else:
             cur.execute("INSERT INTO users (username,email,password) VALUES ('"+username+"','"+email+"','"+password+"')")
             conn.commit()
@@ -144,7 +144,7 @@ class Entry(Resource):
                                  401)
         conn=configconnection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO entries (title,contents,date_) VALUES ('"+title+"','"+content+"','"+date+"')")
+        cur.execute("INSERT INTO entries (title,content,date) VALUES ('"+title+"','"+content+"','"+date+"')")
         conn.commit()
 
         return make_response(jsonify({
@@ -170,9 +170,28 @@ class Entry(Resource):
 class SingleEntry(Resource):
     
     def get(self,entryId):
+        parser = reqparse.RequestParser()
+        """collecting args"""
+        parser.add_argument('token', location='headers')
+
+        """getting specific args"""
+        args = parser.parse_args()
+        token = args['token']
+        
+        if not token:
+                return make_response(jsonify({
+                'message':'token missing'
+            }),400)
+
+        """ implementing token decoding"""
+        decoded = decode_token(token)
+        if decoded["status"] == "Failure":
+            return make_response(jsonify({"message": decoded["message"]}),
+                                 401)
+
         conn=configconnection()
         cur=conn.cursor()
-        cur.execute("SELECT * from entries where entryid=%s",(entryId,))
+        cur.execute("SELECT * from entries where id=%s",(entryId,))
         result=cur.fetchall()
         
         lst=[]
@@ -191,6 +210,24 @@ class viewEntries(Resource):
     
 
     def get(self):
+        parser = reqparse.RequestParser()
+        """collecting args"""
+        parser.add_argument('token', location='headers')
+
+        """getting specific args"""
+        args = parser.parse_args()
+        token = args['token']
+        
+        if not token:
+                return make_response(jsonify({
+                'message':'token missing'
+            }),400)
+
+        """ implementing token decoding"""
+        decoded = decode_token(token)
+        if decoded["status"] == "Failure":
+            return make_response(jsonify({"message": decoded["message"]}),
+                                 401)
         conn=configconnection()
         cur=conn.cursor()
         cur.execute("SELECT * from entries")
@@ -216,12 +253,29 @@ class UpdateEntries(Resource):
         parser.add_argument('title', type=str,required=True)
         parser.add_argument('content', type=str,required=True)
         parser.add_argument('date', type=str, required=True)
+        parser.add_argument('token', location='headers')
 
         """getting specific args"""
         args = parser.parse_args()
         title = args['title']
         content =args['content']
         date = args['date']
+
+        token = args['token']
+
+        if not token:
+            return make_response(jsonify({
+                'message':'token missing'
+            }),400)
+
+        """ implementing token decoding"""
+        decoded = decode_token(token)
+        if decoded["status"] == "Failure":
+            return make_response(jsonify({"message": decoded["message"]}),
+                                 401)
+
+
+
         try:
             conn=configconnection()
             cur=conn.cursor()
