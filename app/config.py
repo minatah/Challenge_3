@@ -1,16 +1,32 @@
 import psycopg2
 import sys
 import os
-import sys
 import datetime
 import jwt
 from datetime import datetime, timedelta
 from flask import current_app
+from app.models import usertable,entrytable
 
-conn = psycopg2.connect(
-    "host='localhost' dbname='MyDiary' user='postgres' password='1234'"
-)
-
+#conn = psycopg2.connect(
+    #"host='localhost' dbname='MyDiary' user='postgres' password='1234'")
+def configconnection():
+    cur=""
+    if current_app.config["TESTING"] is not True:
+        conn = psycopg2.connect("host='localhost' dbname='MyDiary' user='postgres' password='1234'")
+        cur=conn.cursor()
+        cur.execute(usertable)
+        conn.commit()
+        cur.execute(entrytable)
+        conn.commit()
+    else:
+        
+        conn = psycopg2.connect("host='localhost' dbname='testDB' user='postgres' password='1234'")
+        cur =conn.cursor()
+        cur.execute(usertable)
+        conn.commit()
+        cur.execute(entrytable)
+        conn.commit()
+    return conn
 
 def generate_token(username):
     """Generates the access token to be used as the Authorization header"""
@@ -53,3 +69,42 @@ def decode_token(token):
                 "message": "Invalid token. Please register or login"}
 
 
+
+
+class BaseConfig(object):
+    """
+    Common configurations
+    """
+    TESTING = False
+    DEBUG = False
+    SECRET_KEY = os.urandom(24)
+    # Put any configurations here that are common across all environments
+
+
+class TestingConfig(BaseConfig):
+    """Configurations for Testing, with a separate test database."""
+    TESTING = True
+    DEBUG = True
+
+
+class DevelopmentConfig(BaseConfig):
+    """
+    Development configurations
+    """
+
+    DEBUG = True
+
+
+class ProductionConfig(BaseConfig):
+    """
+    Production configurations
+    """
+
+    DEBUG = False
+
+
+app_config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}

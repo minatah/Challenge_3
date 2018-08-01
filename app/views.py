@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, make_response
 from flask_restful import Resource, reqparse
 import json
-from app.config import conn,generate_token,decode_token
+from app.config import generate_token,decode_token,configconnection
 import re
 import psycopg2
 
@@ -46,7 +46,7 @@ class SignUp(Resource):
                                     400)
             
         """creating a sign up  cursor to check for already existing users."""
-
+        conn=configconnection()
         cur = conn.cursor()
         cur.callproc('signup', (username,email,password,))
         """fecthing one value in a row """
@@ -90,9 +90,8 @@ class Login(Resource):
         if password.strip() == "" or password.strip() == " " or password.strip() == "   ":
             return make_response(jsonify({"message": "Password Empty, Enter a valid  password"}),
                                     400)
-                            
 
-
+        conn=configconnection()
         cur = conn.cursor()
         cur.callproc('login', (username,password,))
         """fecthing one value in a row """
@@ -140,8 +139,7 @@ class Entry(Resource):
         if decoded["status"] == "Failure":
             return make_response(jsonify({"message": decoded["message"]}),
                                  401)
-        
-
+        conn=configconnection()
         cur = conn.cursor()
         cur.execute("INSERT INTO entries (title,contents,date_) VALUES ('"+title+"','"+content+"','"+date+"')")
         conn.commit()
@@ -151,6 +149,7 @@ class Entry(Resource):
         }),201) 
     
     def post(self):
+        conn=configconnection()
         try:
 
            return self.insert_entries()
@@ -168,20 +167,27 @@ class Entry(Resource):
 class SingleEntry(Resource):
     
     def get(self,entryId):
-        cur = conn.cursor()
+        conn=configconnection()
+        cur=conn.cursor()
         cur.execute("SELECT * from entries where entryid=%s",(entryId,))
-        result=cur.fetchone()
-        print(result)
-        return {'entry': result}, 200
+        result=cur.fetchall()
+        
+        lst=[]
+        for info in result:
+            dic={}
+            dic["id"]=info[0]
+            dic["title"]=info[1]
+            dic["content"]=info[2]
+            dic["date"]=info[3]
+            lst.append(dic)
+        return {'entry': str(lst).replace('[','').replace(']','')}, 200
 
-       # return make_response(jsonify({
-          #  'message':'Sorry the entry does not exist'
-        #}),404)
 
 
 class viewEntries(Resource):
     def get(self):
-        cur = conn.cursor()
+        conn=configconnection()
+        cur=conn.cursor()
         cur.execute("SELECT * from entries")
         result=cur.fetchall()
         
@@ -211,7 +217,8 @@ class UpdateEntries(Resource):
         content =args['content']
         date = args['date']
         try:
-            cur = conn.cursor()
+            conn=configconnection()
+            cur=conn.cursor()
             cur.execute("UPDATE entries SET title=%s,contents=%s,date_=%s where entryid=%s",(title,content,date,entryId))
             conn.commit()
             return make_response(jsonify({
