@@ -185,7 +185,28 @@ class SingleEntry(Resource):
 
 
 class viewEntries(Resource):
+    parser = reqparse.RequestParser()
+    """collecting args""" 
+    parser.add_argument('token', location='headers')
+     
+      """getting token"""
+      token = args['token']
+       if not token:
+            
+    return make_response(jsonify({
+                'message':'token missing'
+            }),400)    
+       """ implementing token decoding"""
+        
+       decoded = decode_token(token)
+        
+        if decoded["status"] == "Failure":
+ 
+    return make_response(jsonify({"message": decoded["message"]}),
+                                 401)
+
     def get(self):
+
         conn=configconnection()
         cur=conn.cursor()
         cur.execute("SELECT * from entries")
