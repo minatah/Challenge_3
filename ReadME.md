@@ -36,6 +36,12 @@ Testing and knowing coverage run
 
 nosetests or python manage.py test
 
+## Install postgres SQL on your computer.In the sql shell
+
+CREATE DATABASE testDB;
+
+CREATE DATABASE MyDiary;  
+
 ## Endpoints to create a user account and login into the application
 
 HTTP Method	End Point	Action
