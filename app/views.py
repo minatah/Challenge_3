@@ -45,14 +45,24 @@ class SignUp(Resource):
         if len(password.strip()) < 5:
             return make_response(jsonify({"message": "Password is too short, < 5"}),
                                     400)
-            
+
         """creating a sign up  cursor to check for already existing users."""
+
         conn=configconnection()
         cur = conn.cursor()
 
-        cur.execute("INSERT INTO users (username,email,password) VALUES ('"+username+"','"+email+"','"+password+"')")
-        conn.commit()
-        return make_response(jsonify({
+        cur.execute("SELECT username from users where username=%s",[username])
+        rows = cur.fetchone()
+
+        if rows:
+        
+            return make_response(jsonify({
+                "message":'Username is used'
+            }), 201)
+        else:
+            cur.execute("INSERT INTO users (username,email,password) VALUES ('"+username+"','"+email+"','"+password+"')")
+            conn.commit()
+            return make_response(jsonify({
                 "message":'User created successfully'
             }), 201)
 
@@ -87,17 +97,22 @@ class Login(Resource):
 
         conn=configconnection()
         cur = conn.cursor()
+        cur.execute("select username from users where username=%s and password=%s ", (username,password))
 
-        cur.execute("INSERT INTO users (username,password) VALUES ('"+username+"','"+password+"')")
-        conn.commit()
-        
-        token = generate_token(username)
+        rows = cur.fetchone()
 
-        
-        return make_response(jsonify({
+        if rows:
+            token = generate_token(username)
+            return make_response(jsonify({
                 "message":'User signed in successfully',
                 'token':token
             }), 200)
+            
+        else:
+            return make_response(jsonify({
+                   "message":'invalid username or password'
+                    }), 400)
+            
         
 class Entry(Resource):
     def insert_entries(self):
