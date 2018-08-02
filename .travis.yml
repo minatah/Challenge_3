@@ -10,11 +10,11 @@ before_script:
 
 install:
   - pip install -r requirements.txt
-  - pip install nose
+  - pip install pytest pytest-cov
 
 # command to run tests
 script:
-  - nosetests --with-coverage
+  - pytest --cov=app/
 #
 
 after_success:
