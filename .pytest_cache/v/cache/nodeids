@@ -1,0 +1,8 @@
+[
+  "tests/test_entries.py::Tests_Requests::test_get_all_entries",
+  "tests/test_entries.py::Tests_Requests::test_get_single_entry",
+  "tests/test_entries.py::Tests_Requests::test_inserting_entry",
+  "tests/test_entries.py::Tests_Requests::test_login_user",
+  "tests/test_entries.py::Tests_Requests::test_signing_up_users",
+  "tests/test_entries.py::Tests_Requests::test_update_entry"
+]

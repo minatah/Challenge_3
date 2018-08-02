@@ -1,0 +1,3 @@
+{
+  "tests/test_entries.py::Tests_Requests::test_login_user": true
+}

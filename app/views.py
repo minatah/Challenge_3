@@ -279,7 +279,7 @@ class UpdateEntries(Resource):
         try:
             conn=configconnection()
             cur=conn.cursor()
-            cur.execute("UPDATE entries SET title=%s,contents=%s,date_=%s where entryid=%s",(title,content,date,entryId))
+            cur.execute("UPDATE entries SET title=%s,content=%s,date=%s where id=%s",(title,content,date,entryId))
             conn.commit()
             return make_response(jsonify({
         'message': 'entry updated successfully'
