@@ -16,9 +16,9 @@ class Tests_Requests(MyTestCase):
     def test_login_user(self):
          """Tests user when logging in"""
          """first signup"""
-         self.signUp('aminah','aminah@gmail.com', '123456')
+         self.signUp('aminah','aminah@gmail.com', '12345')
          """Then login"""
-         response = self.Login('aminah','123456')
+         response = self.Login('aminah','12345')
          """getting the response  from data"""
          self.assertEqual(response.status_code, 200)
 
