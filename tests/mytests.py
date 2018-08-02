@@ -14,17 +14,16 @@ class MyTestCase(unittest.TestCase):
         """
         Create an instance of the app with the testing configuration
         """
-        app.config.from_object(app_config["testing"])
         
         return current_app
         
     def setUp(self):
         self.client = app.test_client(self)
 
-
     def signUp(self,username, email, password):
         """
         Function to create a request
+
         """
         return self.client.post(
             'API/v1/auth/signup',
