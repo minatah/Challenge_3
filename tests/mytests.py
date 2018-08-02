@@ -57,7 +57,6 @@ class MyTestCase(unittest.TestCase):
         """Get a token for testing all endpoints"""
         response = self.Login("aminah", "12345")
         data = json.loads(response.data)
-        print(data)
         return data['token']
 
     def add_entry(self, title, content,date, token):
