@@ -3,11 +3,9 @@ python:
   - "3.6.4"
 
 before_script:
-  -psql -c 'create database MyDiary;' -U postgres
-  -psql -c 'create table IF NOT EXISTS users (id serial primary key not null,username text,email text,password text);' -U postgres
-  -psql -c 'create table IF NOT EXISTS entries (id serial primary key not null,title text,content text,date text);' -U postgres
-
-
+  - psql -c 'create database MyDiary;' -U postgres
+  - psql -c 'create table IF NOT EXISTS users (id serial primary key not null,username text,email text,password text);' -U postgres
+  - psql -c 'create table IF NOT EXISTS entries (id serial primary key not null,title text,content text,date text);' -U postgres
 
 
 install:
