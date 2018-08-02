@@ -14,7 +14,7 @@ install:
 
 # command to run tests
 script:
-  - nostests --with-coverage
+  - nosetests --with-coverage
 #
 
 after_success:
