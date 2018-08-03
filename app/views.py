@@ -202,7 +202,7 @@ class SingleEntry(Resource):
             dic["content"]=info[2]
             dic["date"]=info[3]
             lst.append(dic)
-        return {'entry': str(lst).replace('[','').replace(']','')}, 200
+        return {'entry': lst[0]}, 200
 
 
 
