@@ -1,14 +1,8 @@
 language: python
 python:
   - "3.6.4"
-
-
-  
-
 services:
   - postgresql
-
-
 
 install:
   - pip install -r requirements.txt
@@ -21,6 +15,7 @@ before_script:
   -psql -c 'create table IF NOT EXISTS entries (id serial primary key not null,title text,content text,date text);' -U postgres
 # command to run tests
 
+# command to run tests
 script:
   - pytest --cov=app/
 #

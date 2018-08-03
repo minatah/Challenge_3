@@ -9,7 +9,7 @@ class Tests_Requests(MyTestCase):
         with self.client:
             """auto generate usernames with the help of system  date time"""
             autogenerate_usernames = str(datetime.datetime.now())
-            response = self.signUp('aminah'+autogenerate_usernames,'aminah@gmail.com', '123456')
+            response = self.signUp('aminah'+autogenerate_usernames,'aminah@gmail.com', '12345')
             """getting the response  from data"""
             self.assertEqual(response.status_code, 201)
 
